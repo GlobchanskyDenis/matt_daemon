@@ -1,0 +1,22 @@
+{
+	"Logger": {
+		"DaemonName": "Matt_daemon",
+		"LogFolder": "/var/log/matt_daemon/",
+		"Permissions": "777"
+	},
+	"Authenticate": [
+		{
+			"Login": "bsabre-c",
+			"PasswordHash": "password"
+		},
+		{
+			"Login": "nmadelay",
+			"PasswordHash": "password"
+		}
+	],
+	"Socket": {
+		"IsTcpSocket": true,
+		"Ip": "127.0.0.1",
+		"Port": 4242
+	}
+}

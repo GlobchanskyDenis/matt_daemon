@@ -61,8 +61,16 @@ func userIsAuthenticated(exit chan os.Signal, server netSocket.Server) bool {
 		password := parse(passwordRaw)
 
 		if auth.IsExist(login, password) == true {
+			println("Авторизация успешна")
+			if err := server.Write([]byte("Авторизация успешна\n")); err != nil {
+				file_logger.GLogger.LogError(err, "Не смог авторизировать пользователя")
+				exit<-syscall.SIGINT
+				return false
+			}
 			file_logger.GLogger.LogInfo("user %s is authenticated", login)
 			return true
+		} else {
+			println("Авторизация провалена")
 		}
 	}
 }

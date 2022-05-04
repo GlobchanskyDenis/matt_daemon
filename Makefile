@@ -8,12 +8,12 @@ MATT_DIR					=	cmd/matt
 MATT_FILES					=	main.go   config.go
 MATT_FILENAMES				=	$(addprefix $(MATT_DIR)/,$(MATT_FILES))
 
-TEST_SERVER_BIN				=	server
-TEST_SERVER_DIR				=	cmd/socketServer
-TEST_SERVER_FILES			=	main.go
-TEST_SERVER_FILENAMES		=	$(addprefix $(TEST_SERVER_DIR)/,$(TEST_SERVER_FILES))
+CLIENT_APP_BIN				=	client_bin
+CLIENT_APP_DIR				=	cmd/clientApp
+CLIENT_APP_FILES			=	main.go      socket.go
+CLIENT_APP_FILENAMES		=	$(addprefix $(CLIENT_APP_DIR)/,$(CLIENT_APP_FILES))
 
-all : $(MATT_BIN) $(DAEMON_BIN) $(TEST_SERVER_BIN)
+all : $(MATT_BIN) $(DAEMON_BIN) $(CLIENT_APP_BIN)
 
 $(MATT_BIN) : $(MATT_FILENAMES)
 	@echo "компилирую бинарник запускающий демон как процесс"
@@ -23,22 +23,14 @@ $(DAEMON_BIN) : $(DAEMON_FILENAMES)
 	@echo "компилирую бинарник демона"
 	@go build -o $(DAEMON_BIN) $(DAEMON_FILENAMES)
 
-$(TEST_SERVER_BIN) : $(TEST_SERVER_FILENAMES)
-	@echo "компилирую бинарник тестового сервера"
-	@go build -o $(TEST_SERVER_BIN) $(TEST_SERVER_FILENAMES)
-
-test :
-	rm -rf client_test
-	rm -rf tcp_server_test
-	rm -rf udp_server_test
-	go build -o client_test pkg/netSocket/deprecated/client.go
-	go build -o tcp_server_test pkg/netSocket/deprecated/tcpServer.go
-	go build -o udp_server_test pkg/netSocket/deprecated/udpServer.go
+$(CLIENT_APP_BIN) : $(CLIENT_APP_FILENAMES)
+	@echo "компилирую бинарник приложения клиента"
+	@go build -o $(CLIENT_APP_BIN) $(CLIENT_APP_FILENAMES)
 
 fclean:
 	@echo "удаляю бинарники"
 	@rm -rf $(MATT_BIN)
 	@rm -rf $(DAEMON_BIN)
-	@rm -rf $(TEST_SERVER_BIN)
+	@rm -rf $(CLIENT_APP_BIN)
 
 re: fclean all
